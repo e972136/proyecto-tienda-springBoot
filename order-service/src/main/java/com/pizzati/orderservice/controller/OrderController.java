@@ -27,7 +27,7 @@ public class OrderController {
         return "Order Placed Successfully";
     }
 
-    @GetMapping
+    @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<OrderReponse> getOrders(){
         return orderService.findAll();

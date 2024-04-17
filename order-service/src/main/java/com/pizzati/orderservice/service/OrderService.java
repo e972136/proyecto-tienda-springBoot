@@ -18,10 +18,11 @@ import java.util.UUID;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClient;
 
-    public OrderService(OrderRepository orderRepository, WebClient webClient) {
+    public OrderService(OrderRepository orderRepository, WebClient.Builder webClient) {
         this.orderRepository = orderRepository;
+
         this.webClient = webClient;
     }
 
@@ -32,10 +33,11 @@ public class OrderService {
         order.setOrderLineItemsList(list);
 
         List<String> skuCodes = list.stream().map(o -> o.getSkuCode()).toList();
-
+//
         //llamar a inventario y ver si hay producto en inventario
-        InventoryResponseExistency[] result= webClient.get()
-                .uri("http://localhost:9003/api/inventory",
+        InventoryResponseExistency[] result= webClient.build().get()
+
+                .uri("http://inventory-service/api/inventory",
                         uriBuilder -> uriBuilder.queryParam("skuCodes",skuCodes).build())
                 .retrieve()
                 .bodyToMono(InventoryResponseExistency[].class)

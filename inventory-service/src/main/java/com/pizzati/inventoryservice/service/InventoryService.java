@@ -6,6 +6,8 @@ import com.pizzati.inventoryservice.entity.dto.InventoryResponse;
 import com.pizzati.inventoryservice.entity.dto.InventoryResponseExistency;
 import com.pizzati.inventoryservice.repository.InventroyRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +39,12 @@ public class InventoryService {
         );
     }
 
+    @Autowired
+    private ServletWebServerApplicationContext webServerAppCtxt;
+
     public List<InventoryResponseExistency> findInStocks(List<String> skuCodes) {
+        int port = webServerAppCtxt.getWebServer().getPort();
+        System.out.println("port:"+port);
         return inventroyRepository.findBySkuCodeIn(skuCodes).stream().map(i -> mapToResponse(i)).toList();
     }
 
